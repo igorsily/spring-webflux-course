@@ -7,3 +7,4 @@ spring:
       username: ${MONGODB_USERNAME:mongo}
       password: ${MONGODB_PASSWORD:mongo}
       database: ${MONGODB_DATABASE:mongo}
+      auto-index-creation: true
