@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: spring-webflux
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017}
+      username: ${MONGODB_USERNAME:mongo}
+      password: ${MONGODB_PASSWORD:mongo}
+      database: ${MONGODB_DATABASE:mongo}
