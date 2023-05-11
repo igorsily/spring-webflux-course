@@ -23,6 +23,8 @@ public class ControllerExceptionHandler {
                 .message(e.getMessage())
                 .method(request.getMethod().toString())
                 .path(request.getPath().toString())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
                 .build();
 
         return new ResponseEntity<>(Mono.just(exceptionResponse), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -36,6 +38,8 @@ public class ControllerExceptionHandler {
                 .message(ExceptionUtil.getErrorDuplicateMessage(e.getMessage()))
                 .method(request.getMethod().toString())
                 .path(request.getPath().toString())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .build();
 
         return new ResponseEntity<>(Mono.just(exceptionResponse), HttpStatus.BAD_REQUEST);
@@ -56,10 +60,24 @@ public class ControllerExceptionHandler {
                 .message("Validation error")
                 .method(request.getMethod().toString())
                 .path(request.getPath().toString())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .errorValidationList(errorValidationList)
                 .build();
 
         return new ResponseEntity<>(Mono.just(exceptionResponse), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public final ResponseEntity<ExceptionResponse> handleResourceNotFoundException(Exception e, ServerHttpRequest request) {
+       ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .message(e.getMessage())
+                .method(request.getMethod().toString())
+                .path(request.getPath().toString())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .build();
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
 

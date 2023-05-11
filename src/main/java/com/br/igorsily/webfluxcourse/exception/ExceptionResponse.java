@@ -29,6 +29,10 @@ public class ExceptionResponse implements Serializable {
 
     private String method;
 
+    private Integer status;
+
+    private String error;
+
     @Builder.Default
     private List<ErrorValidation> errorValidationList = new ArrayList<>();
 }
