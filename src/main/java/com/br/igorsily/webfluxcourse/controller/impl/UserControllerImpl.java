@@ -2,6 +2,7 @@ package com.br.igorsily.webfluxcourse.controller.impl;
 
 
 import com.br.igorsily.webfluxcourse.controller.UserController;
+import com.br.igorsily.webfluxcourse.mapper.UserMapper;
 import com.br.igorsily.webfluxcourse.model.request.UserRequest;
 import com.br.igorsily.webfluxcourse.model.response.UserResponse;
 import com.br.igorsily.webfluxcourse.service.UserService;
@@ -20,6 +21,8 @@ public class UserControllerImpl implements UserController {
 
     private final UserService userService;
 
+    private final UserMapper userMapper;
+
     @Override
     public ResponseEntity<Mono<Void>> save(UserRequest request) {
 
@@ -30,7 +33,11 @@ public class UserControllerImpl implements UserController {
 
     @Override
     public ResponseEntity<Mono<UserResponse>> findById(String id) {
-        return null;
+
+        var user = userService.findById(id).map(userMapper::toResponse);
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+
     }
 
     @Override

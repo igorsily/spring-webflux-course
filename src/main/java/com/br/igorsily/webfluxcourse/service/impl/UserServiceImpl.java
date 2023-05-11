@@ -21,4 +21,12 @@ public class UserServiceImpl implements UserService {
     public Mono<User> save(UserRequest request) {
         return userRepository.save(userMapper.toEntity(request));
     }
+
+    @Override
+    public Mono<User> findById(String id) {
+
+        return userRepository.findById(id);
+    }
+
+
 }
