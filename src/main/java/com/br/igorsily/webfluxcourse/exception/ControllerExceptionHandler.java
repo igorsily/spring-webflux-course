@@ -8,7 +8,11 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.support.WebExchangeBindException;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
@@ -36,6 +40,26 @@ public class ControllerExceptionHandler {
 
         return new ResponseEntity<>(Mono.just(exceptionResponse), HttpStatus.BAD_REQUEST);
 
+    }
+
+    @ExceptionHandler(WebExchangeBindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public final ResponseEntity<Mono<ExceptionResponse>> handleWebExchangeBindException(WebExchangeBindException e, ServerHttpRequest request) {
+
+        List<ErrorValidation> errorValidationList = new ArrayList<>();
+        e.getBindingResult().getFieldErrors().forEach(error -> errorValidationList.add(ErrorValidation.builder()
+                .field(error.getField())
+                .message(error.getDefaultMessage())
+                .build()));
+
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .message("Validation error")
+                .method(request.getMethod().toString())
+                .path(request.getPath().toString())
+                .errorValidationList(errorValidationList)
+                .build();
+
+        return new ResponseEntity<>(Mono.just(exceptionResponse), HttpStatus.BAD_REQUEST);
     }
 
 

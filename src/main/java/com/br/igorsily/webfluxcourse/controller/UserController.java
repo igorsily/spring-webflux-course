@@ -2,6 +2,7 @@ package com.br.igorsily.webfluxcourse.controller;
 
 import com.br.igorsily.webfluxcourse.model.request.UserRequest;
 import com.br.igorsily.webfluxcourse.model.response.UserResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,7 @@ public interface UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Mono<Void>> save(@RequestBody UserRequest request);
+    ResponseEntity<Mono<Void>> save(@Valid @RequestBody UserRequest request);
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
