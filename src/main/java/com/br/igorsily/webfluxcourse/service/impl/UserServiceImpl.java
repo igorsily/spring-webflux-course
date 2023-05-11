@@ -46,5 +46,11 @@ public class UserServiceImpl implements UserService {
                 .flatMap(userRepository::save);
     }
 
+    @Override
+    public Mono<Void> delete(String id) {
+        return this.findById(id)
+                .flatMap(userRepository::delete);
+    }
+
 
 }
