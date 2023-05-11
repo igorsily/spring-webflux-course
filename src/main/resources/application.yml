@@ -3,8 +3,5 @@ spring:
     name: spring-webflux
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://localhost:27017}
-      username: ${MONGODB_USERNAME:mongo}
-      password: ${MONGODB_PASSWORD:mongo}
-      database: ${MONGODB_DATABASE:mongo}
+      uri: mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DB}?retryWrites=true&w=majority
       auto-index-creation: true
