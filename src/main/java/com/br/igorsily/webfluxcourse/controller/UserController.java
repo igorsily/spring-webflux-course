@@ -2,9 +2,9 @@ package com.br.igorsily.webfluxcourse.controller;
 
 import com.br.igorsily.webfluxcourse.model.request.UserRequest;
 import com.br.igorsily.webfluxcourse.model.response.UserResponse;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,7 +13,7 @@ public interface UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Mono<Void>> save(@Valid @RequestBody UserRequest request);
+    ResponseEntity<Mono<Void>> save(@Validated(UserRequest.UserRequestView.UserRequestCreateView.class) @RequestBody UserRequest request);
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -25,7 +25,7 @@ public interface UserController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<Mono<UserResponse>> update(@PathVariable("id") String id, @RequestBody UserRequest request);
+    ResponseEntity<Mono<UserResponse>> update(@PathVariable("id") String id, @Validated(UserRequest.UserRequestView.UserRequestUpdateView.class) @RequestBody UserRequest request);
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

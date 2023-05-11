@@ -39,5 +39,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    @Override
+    public Mono<User> update(String id, UserRequest request) {
+        return this.findById(id)
+                .map(entity -> userMapper.toEntity(request, entity))
+                .flatMap(userRepository::save);
+    }
+
 
 }

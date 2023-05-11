@@ -5,6 +5,7 @@ import com.br.igorsily.webfluxcourse.model.request.UserRequest;
 import com.br.igorsily.webfluxcourse.model.response.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;
 import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
@@ -17,7 +18,12 @@ import static org.mapstruct.NullValuePropertyMappingStrategy.IGNORE;
 public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
-    User toEntity(UserRequest userRequest);
+    User toEntity(final UserRequest userRequest);
 
-    UserResponse toResponse(User user);
+    @Mapping(target = "id", ignore = true)
+    User toEntity(final UserRequest request, @MappingTarget final User entity);
+
+    UserResponse toResponse(final User user);
+
+
 }
