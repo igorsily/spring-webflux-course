@@ -122,5 +122,35 @@ class UserServiceImplTest {
         verify(userRepository, times(1)).findAll();
     }
 
+    @Test
+    @DisplayName("Should be update a user")
+    void update() {
+        UserRequest userRequest = new UserRequest(
+                faker.name().fullName(),
+                faker.internet().emailAddress(),
+                faker.internet().password()
+        );
+
+        User entity = User.builder()
+                .name(userRequest.name())
+                .email(userRequest.email())
+                .password(userRequest.password())
+                .build();
+
+        when(userMapper.toEntity(any(UserRequest.class), any(User.class))).thenReturn(entity);
+        when(userRepository.findById(anyString())).thenReturn(Mono.just(entity));
+        when(userRepository.save(any(User.class))).thenReturn(Mono.just(entity));
+
+        Mono<User> result = userService.update(anyString(), userRequest);
+
+        StepVerifier.create(result)
+                .expectNextMatches(user -> user.getClass().equals(User.class))
+                .expectComplete()
+                .verify();
+
+        verify(userRepository, times(1)).save(any(User.class));
+
+    }
+
 
 }
