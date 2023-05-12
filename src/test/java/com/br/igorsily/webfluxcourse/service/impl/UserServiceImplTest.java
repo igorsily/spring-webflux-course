@@ -153,4 +153,23 @@ class UserServiceImplTest {
     }
 
 
+    @Test
+    @DisplayName("Should be delete a user")
+    void delete() {
+
+        User entity = User.builder().build();
+
+        when(userRepository.findById(anyString())).thenReturn(Mono.just(entity));
+        when(userRepository.delete(any(User.class))).thenReturn(Mono.empty());
+
+        Mono<Void> result = userService.delete(anyString());
+
+        StepVerifier.create(result)
+                .expectComplete()
+                .verify();
+
+        verify(userRepository, times(1)).delete(any(User.class));
+    }
+
+
 }
