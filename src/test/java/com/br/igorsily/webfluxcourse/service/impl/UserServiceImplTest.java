@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -20,7 +21,7 @@ import java.util.Locale;
 import static java.lang.String.format;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class) // This annotation is used to tell JUnit 5 to enable Mockito
 class UserServiceImplTest {
@@ -91,6 +92,7 @@ class UserServiceImplTest {
 
 
         String messageErro = format("User not found with id %s", faker.internet().uuid());
+
         when(userRepository.findById(anyString())).thenReturn(Mono.error(new ResourceNotFoundException(
                 messageErro
         )));
@@ -102,6 +104,22 @@ class UserServiceImplTest {
                         throwable.getMessage().equals(messageErro))
                 .verify();
 
+    }
+
+    @Test
+    @DisplayName("Should be return all users")
+    void findAll() {
+
+        when(userRepository.findAll()).thenReturn(Flux.just(User.builder().build()));
+
+        Flux<User> result = userService.findAll();
+
+        StepVerifier.create(result)
+                .expectNextMatches(user -> user.getClass().equals(User.class))
+                .expectComplete()
+                .verify();
+
+        verify(userRepository, times(1)).findAll();
     }
 
 
